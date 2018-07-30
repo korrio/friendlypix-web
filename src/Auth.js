@@ -21,7 +21,9 @@ import 'firebase/auth';
 import firebaseui from 'firebaseui';
 import Router from './Router';
 import page from 'page';
-import {Utils} from './Utils';
+import {
+  Utils
+} from './Utils';
 
 /**
  * Handles the user auth flows and updating the UI depending on the auth state.
@@ -81,8 +83,8 @@ export default class Auth {
     // Confgiure and add the FirebaseUI Widget
     let signInFlow = 'popup';
     // For iOS full screen apps we use the redirect auth mode.
-    if (('standalone' in window.navigator)
-        && window.navigator.standalone) {
+    if (('standalone' in window.navigator) &&
+      window.navigator.standalone) {
       signInFlow = 'redirect';
     }
 
@@ -90,11 +92,12 @@ export default class Auth {
     this.uiConfig = {
       'signInFlow': signInFlow,
       'signInOptions': [
-        firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-        // firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+        //firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+        firebase.auth.FacebookAuthProvider.PROVIDER_ID,
+        firebase.auth.EmailAuthProvider.PROVIDER_ID
       ],
       'callbacks': {
-        'uiShown': function() {
+        'uiShown': function () {
           const intervalId = setInterval(() => {
             const IDPButtons = $('.firebaseui-idp-button');
             const nbIDPButtonDisplayed = IDPButtons.length;
@@ -133,7 +136,7 @@ export default class Auth {
       document.body.classList.add('fp-signed-in');
       this.userId = user.uid;
       this.signedInUserAvatar.css('background-image',
-          `url("${Utils.addSizeToGoogleProfilePic(user.photoURL) || '/images/silhouette.jpg'}")`);
+        `url("${Utils.addSizeToGoogleProfilePic(user.photoURL) || '/images/silhouette.jpg'}")`);
       this.signedInUsername.text(user.displayName || 'Anonymous');
       this.usernameLink.attr('href', `/user/${user.uid}`);
     }
@@ -173,7 +176,7 @@ export default class Auth {
     }).catch((error) => {
       if (error.code === 'auth/requires-recent-login') {
         window.alert('You need to have recently signed-in to delete your account.\n' +
-            'Please sign-in and try again.');
+          'Please sign-in and try again.');
         this.auth.signOut();
         page('/');
       }

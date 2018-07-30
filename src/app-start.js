@@ -40,7 +40,8 @@ IpFilter.filterEuCountries();
 // Load the app.
 $(document).ready(() => {
   // Now we'll load the rest of the app which is split to speed up initial load.
-  const loadApp = () => import(/* webpackPrefetch: true */ './app');
+  const loadApp = () =>
+    import ( /* webpackPrefetch: true */ './app');
   const auth = new Auth();
   // Starts the router.
   window.fpRouter = new Router(loadApp, auth);
@@ -55,7 +56,7 @@ if ('serviceWorker' in navigator) {
 }
 
 // Initialize Google Analytics.
-import(/* webpackPrefetch: true */ 'universal-ga').then((analytics) => {
-  analytics.initialize('UA-25993200-10');
-  analytics.pageview('/');
-});
+// import(/* webpackPrefetch: true */ 'universal-ga').then((analytics) => {
+//   analytics.initialize('UA-25993200-10');
+//   analytics.pageview('/');
+// });

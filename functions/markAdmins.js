@@ -28,17 +28,22 @@ exports.byEmail = functions.database.ref('/admins/{index}/email').onCreate(async
   const adminEmail = snap.val();
   try {
     const user = await admin.auth().getUserByEmail(adminEmail);
-    await admin.auth().setCustomUserClaims(user.uid, {admin: true})
+    await admin.auth().setCustomUserClaims(user.uid, {
+      admin: true
+    })
     console.log(`User ${adminEmail} successfully marked as an admin.`);
     await snap.ref.parent.update({
       email: user.email || null,
-      uid: user.uid, status: 'OK',
+      uid: user.uid,
+      status: 'OK',
       timestamp: admin.database.ServerValue.TIMESTAMP,
     });
     console.log(`Timestamp saved in database for ${adminEmail}.`);
   } catch (error) {
     console.error(`There was an error marking user ${adminEmail} as an admin.`, error);
-    await snap.ref.parent.update({error: error});
+    await snap.ref.parent.update({
+      error: error
+    });
     console.log(`Error message saved in database for ${adminEmail}.`);
   }
 });
@@ -50,17 +55,22 @@ exports.byId = functions.database.ref('/admins/{index}/uid').onCreate(async (sna
   const uid = snap.val();
   try {
     const user = await admin.auth().getUser(uid);
-    await admin.auth().setCustomUserClaims(user.uid, {admin: true});
+    await admin.auth().setCustomUserClaims(user.uid, {
+      admin: true
+    });
     console.log(`User ${uid} successfully marked as an admin.`);
     await snap.ref.parent.update({
       email: user.email || null,
-      uid: user.uid, status: 'OK',
+      uid: user.uid,
+      status: 'OK',
       timestamp: admin.database.ServerValue.TIMESTAMP,
     });
     console.log(`Timestamp saved in database for ${uid}.`);
   } catch (error) {
     console.error(`There was an error marking user ${uid} as an admin.`, error);
-    await snap.ref.parent.update({error: error});
+    await snap.ref.parent.update({
+      error: error
+    });
     console.log(`Error message saved in database for ${uid}.`);
   }
 });
@@ -70,11 +80,11 @@ exports.byId = functions.database.ref('/admins/{index}/uid').onCreate(async (sna
  */
 exports.removeAdmins = functions.database.ref('/admins/{index}').onDelete((snap) => {
   const adminEmail = snap.val().email;
-  try {
-    const user = await admin.auth().getUserByEmail(adminEmail);
-    await admin.auth().setCustomUserClaims(user.uid, {admin: null});
-    console.log(`User ${adminEmail} successfully unmarked as an admin.`);
-  } catch(error) {
-    console.error(`There was an error un-marking user ${adminEmail} as an admin.`, error);
-  }
+  // try {
+  //   const user = await admin.auth().getUserByEmail(adminEmail);
+  //   await admin.auth().setCustomUserClaims(user.uid, {admin: null});
+  //   console.log(`User ${adminEmail} successfully unmarked as an admin.`);
+  // } catch(error) {
+  //   console.error(`There was an error un-marking user ${adminEmail} as an admin.`, error);
+  // }
 });
